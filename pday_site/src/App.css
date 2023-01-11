@@ -1,0 +1,108 @@
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+.App-header {
+    background-color: #282c34;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-size: calc(10px + 2vmin);
+    color: white;
+}
+
+.App-logo {
+    height: 100px;
+    fill: white;
+}
+
+.container {
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+}
+
+.third-container {
+    display: flex;
+    padding: 1rem;
+    border-radius: 1rem;
+    background-color: #393d45;
+    flex: 1;
+    min-height: 10rem;
+}
+
+.third-container p {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    flex: 1;
+}
+
+#main {
+    overflow-y: hidden;
+}
+
+/* 25% black background filter */
+#filter {
+    position: absolute;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.25);
+}
+
+/* rainbow gradient text with bold and text-shadow
+ * choose a nice sans-serif dont
+ */
+#t1,
+#ts {
+    position: absolute;
+    top: 15%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 124px;
+    width: 75%;
+    text-align: center;
+}
+
+#t1 {
+    z-index: 3;
+    background: -webkit-linear-gradient(
+        45deg,
+        #fb4934,
+        #fe8019,
+        #fabd2f,
+        #b8bb26,
+        #8ec07c,
+        #83a598,
+        #d3869b,
+        #d65d0e
+    );
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation-name: tesselate;
+    animation-duration: 10s;
+    animation-iteration-count: infinite;
+}
+#ts {
+    z-index: 2;
+    text-shadow: 5px 5px 10px #000;
+}
+
+@keyframes tesselate {
+    0% {
+        background-position: 0% 0%;
+    }
+    50% {
+        background-position: 50% 0%;
+    }
+    100% {
+        background-position: 100% 0%;
+    }
+}
