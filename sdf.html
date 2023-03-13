@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, shrink-to-fit=0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+    <title></title>
+    <style>
+    body{
+			position: absolute;
+            width:100vw;
+            height:100vh;
+            overflow: hidden;
+            top:0;
+            left:0;
+            margin:0;
+            padding:0;
+    }
+		#editor {
+			position: absolute;
+			width:35vw;
+			height:100vh;
+            top: 0;
+            left: 0;
+            margin: 0;
+            padding: 0;
+		}
+        canvas {
+            position: absolute;
+            top: 0;
+            left: 35vw;
+            padding: 0;
+            margin: 0;
+        }
+        button {
+            position: absolute;
+            top: 92.5vh;
+            left: 27.5vw;
+            width: 5vw;
+            height: 3.5vh;
+            padding:0;
+            margin:0;
+        }
+    </style>
+</head>
+<body>
+<pre id="editor">
+float sdf(vec3 position){
+    return sphere( position, 3.0, vec3(0.));
+}
+</pre>
+<button onclick="recompile()">Recompile</button>
+<script src="vendor/three.min.js"></script>
+<!--
+<script src="vendor/postprocessing/EffectComposer.js"></script>
+<script src="vendor/postprocessing/RenderPass.js"></script>
+<script src="vendor/postprocessing/ShaderPass.js"></script>
+<script src="vendor/postprocessing/MaskPass.js"></script>
+
+<script src="vendor/shaders/CopyShader.js"></script>
+<script src="vendor/shaders/FXAAShader.js"></script>
+/-->
+
+<!--<script src="MouseControls.js"></script>-->
+<script src="vendor/controls/OrbitControls.js"></script>
+<script src="ace/ace.js"></script>
+<script src="raymarcher.js"></script>
+<script src="composer.js"></script>
+
+<script>
+		var editor = ace.edit("editor");
+    editor.setTheme("ace/theme/gruvbox");
+    editor.session.setMode("ace/mode/glsl");
+
+    var rm;
+    var composer;
+    function init() 
+		{
+        rm = new RayMarcher();
+        rm.loadFragmentShader("glsl/interactive.glsl", onFragmentLoaded, editor.getValue());
+
+        new THREE.OrbitControls( rm.camera );
+
+        rm.camera.position.z = 8;
+
+//        composer = new Composer( rm );
+
+        document.body.appendChild( rm.domElement );
+        window.addEventListener( "resize", onResize, false );
+        onResize();
+    }
+
+    function onFragmentLoaded( scope )
+    {
+
+        scope.setUniform( "color0", "v3", new THREE.Vector3(1.0, 1.0, 1.0) ); //yellow
+        scope.setUniform( "light0", "v3", new THREE.Vector3(-0.5, 0.75, -0.5) );
+
+        scope.setUniform( "color1", "v3", new THREE.Vector3(1.0, 1.0, 1.0) ); //blue
+		scope.setUniform( "light1", "v3", new THREE.Vector3( 0.5, -0.75, 0.5) );
+
+    }
+
+    function onResize(e)
+    {
+        rm.setSize( window.innerWidth * 0.65, window.innerHeight);
+        if( composer !=null )composer.setSize( window.innerWidth * 0.65, window.innerHeight);
+    }
+
+    function animate() {
+        requestAnimationFrame( animate );
+
+        rm.update();
+        rm.render();
+        if(rm.loaded && composer !=null ) composer.render();
+    }
+
+    function recompile() {
+        rm.loadFragmentShader("glsl/interactive.glsl", onFragmentLoaded, editor.getValue())
+    }
+    init();
+    animate();
+</script>
+
+
+
+</body>
+</html>
